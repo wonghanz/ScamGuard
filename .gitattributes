@@ -1,0 +1,21 @@
+# Checked out with LF everywhere. gradlew is invoked by CI on a Linux runner, and
+# a CRLF shebang there fails as "bad interpreter: /usr/bin/env bash^M".
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jar binary
+*.webp binary
+*.9.png binary
+
+*.kt eol=lf
+*.kts eol=lf
+*.sh eol=lf
+gradlew eol=lf
+*.xml eol=lf
+*.yml eol=lf
+*.md eol=lf
+*.html eol=lf
+
+# cmd.exe needs CRLF in batch files; gradlew.bat is the one exception here.
+*.bat text eol=crlf

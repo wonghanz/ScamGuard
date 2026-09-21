@@ -1,0 +1,51 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Assemble debug APK
+        run: ./gradlew --no-daemon :app:assembleDebug
+
+      - name: APK sanity
+        run: |
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          # No key, token or endpoint may ever ship inside the binary.
+          if unzip -p "$APK" | grep -qiE 'sk-[a-z0-9]{20,}|bearer [a-z0-9]{20,}'; then
+            echo "refusing to publish: a credential appears to be embedded"
+            exit 1
+          fi
+          echo "artifact $(du -h "$APK" | cut -f1)"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scamguard-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No committed local state
+        run: |
+          test ! -f local.properties
+          if git grep -nI -E 'sk-[A-Za-z0-9]{20,}' -- . ':!*.md'; then
+            echo "a key-like string is tracked in the repo"; exit 1
+          fi

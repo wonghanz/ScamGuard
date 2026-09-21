@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ScamGuard — offline scam link and text message checker for Android: see who really owns a link before you tap it</title>
+<meta name="description" content="ScamGuard is a free, MIT-licensed Android app that reads a message you have already received — SMS, WhatsApp, email, a comment — and prints every reason inside the text itself to look closer. It works out which part of each address decides who owns it, catches a brand's name used as decoration or one keystroke off its real domain, finds invisible characters, text before an @, an address folded into a query, a bulk-sold suffix and a login page on an IP literal, and scores twelve families of scam wording in English and Chinese. Every weight is published in one file and every check that did not fire is printed too. No blocklist lookup, no score out of 100, no real-or-fake verdict, no inbox access, no account, no API key needed; it runs in airplane mode and never opens the link you show it.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Canonical is where this file is intended to live. GitHub Pages is not enabled on
+     this repository yet, so until it is, this URL resolves nowhere. Deliberately no
+     og:image: there is no banner asset in the repo, and declaring one that 404s is
+     worse than declaring none. -->
+<link rel="canonical" href="https://wonghanz.github.io/ScamGuard/">
+<meta name="theme-color" content="#07161A">
+<meta name="keywords" content="check link before clicking android, is this link safe, text message scam detector offline, phishing sms checker android, how to tell if a link is a scam, who owns this domain, lookalike domain checker, shopee scam link, gcash phishing message, parcel delivery scam sms, kyc verification scam, punycode homograph explained, url redirect hidden destination, short link without resolving, scam message checker no upload, open source anti phishing android, offline link analyzer, what is the registrable domain">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ScamGuard">
+<meta property="og:title" content="ScamGuard — what this message says about itself, before you tap it">
+<meta property="og:description" content="Share a message in and read the part of the address that decides who answers. Every weight published, every unchecked thing named, nothing sent anywhere and no link ever opened.">
+<meta property="og:url" content="https://wonghanz.github.io/ScamGuard/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ScamGuard — offline link and message checker for Android">
+<meta name="twitter:description" content="Not a blocklist. A reading of the text in front of you: ownership, look-alikes, hidden characters and the wording's own tells, with every weight on screen.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ScamGuard",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Android 8.0 and newer",
+  "description": "Open-source Android app that reads a suspicious message and its links entirely on the device and prints the reasons to look closer. It extracts every link-shaped string, resolves which labels of a host decide ownership using a curated subset of the Public Suffix List, decodes punycode and transliterates accents, detects mixed-script hosts and zero-width characters, reports text before an @ and a second address folded into a query string, compares hostnames against 83 published domains for 39 brands to surface look-alikes, sub-label borrowing and one- or two-keystroke typos, scores twelve families of scam framing in English and Chinese once per family rather than per word, and prints which checks were run and did not match. It uses no blocklist, no threat feed and no network request: it never resolves, previews or follows a link. It requests no runtime permission, declares no SMS access by design, keeps no history, ships without an API key, and refuses to output a percentage, a confidence score or a real-or-fake verdict.",
+  "url": "https://wonghanz.github.io/ScamGuard/",
+  "codeRepository": "https://github.com/wonghanz/ScamGuard",
+  "programmingLanguage": ["Kotlin", "Jetpack Compose"],
+  "softwareVersion": "0.1.0",
+  "datePublished": "2026-09-21",
+  "isAccessibleForFree": true,
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "featureList": [
+    "shows the part of an address that decides who controls it, read right to left",
+    "look-alike detection: brand inside a host, whole address as a sub-label, one or two keystrokes off",
+    "punycode decoding, mixed-script and invisible-character detection",
+    "text before an @, and a second address folded into the query string",
+    "twelve families of scam wording in English and Chinese, scored once per family",
+    "full published weight table, plus a list of what was checked and did not match",
+    "no blocklist, no threat feed, no link ever resolved, opened or previewed",
+    "no runtime permission and no SMS access; nothing stored and no history",
+    "optional plain-words pass that sends findings, never the message body, to your own endpoint"
+  ],
+  "softwareRequirements": ["Android 8.0 (API 26) or newer"],
+  "publisher": { "@type": "Person", "name": "wonghanz", "url": "https://github.com/wonghanz" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I check a link before clicking it on Android?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Share the message into ScamGuard, or paste it. The app prints the owner-part of every address in it, which is the section read right to left rather than left to right, and lists what looks borrowed, generated, hidden or unsupported by the visible name. Nothing is opened, so checking a link never announces that your number is live." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can ScamGuard read my SMS and warn me automatically?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No, and there is no setting for it. The app declares no SMS permission by design: scanning a person's inbox to protect it would make the checker the thing it guards against. The message comes to the app by share sheet or by typing, one at a time, and nothing else on the device is looked at." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does ScamGuard say inconclusive instead of safe or dangerous?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Because both words are claims an on-device string checker cannot support. A reading under five points prints inconclusive, and a reading with no findings at all prints that it is not a clearance. A domain registered yesterday, correctly spelled and politely worded, trips nothing here by design — that is the scam that works, and pretending otherwise would be the app lying about its own reach." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does ScamGuard use a scam domain database?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. It ships a weight table and a curated list of 83 published brand domains, both in a single file you can read. A database is out of date in exactly the direction that matters, because the address in your message is usually newer than the feed. The list is deliberately short rather than generous, since an over-long allowlist quietly turns detections into misses." }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the owner-part of a domain and why does it matter?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It is the registered name plus the public suffix — in shopee-pay-help.top, that is the last two labels, not the first. Everything to the left of the owner-part is chosen freely by whoever registered the address, which is why an address can begin with a familiar brand name and belong to a stranger. Reading an address right to left is the single most useful habit against link scams, and it needs no software at all." }
+    },
+    {
+      "@type": "Question",
+      "name": "How does it catch a look-alike domain?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Four ways. A brand name appearing inside a host that is not one of its published domains. A brand's whole address used as a sub-label under somebody else's domain. One or two keystrokes of edit distance from a known registered name, and the same test after collapsing letter pairs that double up for one character, such as rn for m. And two writing systems inside one hostname, which is how a Cyrillic о sits inside a Latin word." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can it unmask or resolve a bit.ly link?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No, and that is deliberate. Following a short link is a request to a server chosen by whoever sent it, and the request itself tells them the number is live and reading. ScamGuard reports that the destination is not present in the text and leaves it there. Type the full address, or ask the sender, and check that instead." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did a link I trust come back with points on it?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Because the findings are shapes, not identities. A chat-app deep link scores three points whether it belongs to a courier or a friend, and a domain one keystroke from a marketplace's address might be an honest business with an unfortunate name. The weight table sits on screen under every reading, so you can see which line fired and judge it yourself." }
+    },
+    {
+      "@type": "Question",
+      "name": "Which languages does the wording check cover?",
+      "acceptedAnswer": { "@type": "Answer", "text": "English and Chinese. The cue lists are in the app's one table file. Malay, Thai, Vietnamese, Indonesian and Tagalog are not checked at all, and the app states that rather than returning a quiet zero that could be mistaken for an all-clear." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need an account or an API key?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Neither. Every check runs offline with no configuration. A base URL, model name and key only unlock the optional plain-words pass, which sends the findings and not the message, and can be pointed at a model running on your own network." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does ScamGuard store or upload the messages I check?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. There is no history screen, no queue and nothing written to disk, because a forwarded scam text carries somebody's phone number. The form is cleared when the app leaves the foreground. The manifest sets allowBackup=false, so neither a typed key nor a checked message can ride out in a cloud backup or an adb backup. Analytics, crash reporting, ads and attribution SDKs are all absent." }
+    },
+    {
+      "@type": "Question",
+      "name": "Will ScamGuard stop me being scammed?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. It blocks nothing, cannot see inside an image, a voice note, a PDF or a QR code, and cannot know a domain from yesterday. What it does is make the shapes inside a message easier to read, which is a much smaller claim than the ones usually made about this problem." }
+    }
+  ]
+}
+</script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+         background: #07161A; color: #F2F8F9; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 64px 22px 80px; }
+  h1 { font-size: clamp(29px, 5.6vw, 41px); line-height: 1.16; letter-spacing: -0.02em; margin: 0 0 10px; }
+  .lede { font-size: 19px; color: #9FB6BB; margin: 0 0 30px; }
+  .mark { display: inline-block; width: 34px; height: 22px; border-radius: 999px;
+          border: 2.4px solid #4FE0E4; position: relative; margin-bottom: 20px; }
+  .mark::after { content: ""; position: absolute; right: 3px; top: 5.5px; width: 10px; height: 3px;
+                 border-radius: 2px; background: #4FE0E4; }
+  .mark::before { content: ""; position: absolute; right: 2px; bottom: -8px; width: 13px; height: 6px;
+                  border: 2px solid #4FE0E4; border-top: none; border-radius: 0 0 4px 4px; opacity: .8; }
+  .cta { display: inline-block; background: #0B6C72; color: #fff; text-decoration: none;
+         padding: 13px 24px; border-radius: 999px; font-weight: 600; margin: 0 10px 14px 0; }
+  .cta.alt { background: transparent; border: 1px solid #2A4B53; color: #F2F8F9; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .1em; color: #4FE0E4;
+       margin: 46px 0 14px; }
+  h3 { font-size: 17px; margin: 28px 0 8px; }
+  ul { padding-left: 20px; margin: 0; }
+  li { margin-bottom: 9px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 9px 0; border-bottom: 1px solid #163137; vertical-align: top; }
+  th { color: #9FB6BB; font-weight: 500; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; color: #4FE0E4; white-space: nowrap; }
+  .note { background: #10262B; border: 1px solid #1A353C; border-radius: 18px; padding: 18px 20px; margin-top: 26px; }
+  .note strong { color: #E8A33D; }
+  code, pre { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+  pre { background: #10262B; border: 1px solid #1A353C; border-radius: 14px; padding: 16px; overflow: auto; }
+  footer { margin-top: 54px; font-size: 14px; color: #9FB6BB; }
+  a { color: #4FE0E4; }
+  .q { font-weight: 600; margin: 22px 0 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="mark" aria-hidden="true"></span>
+  <h1>ScamGuard — what a suspicious link or text message actually says, read on your own phone</h1>
+  <p class="lede">An open source Android app that takes the message you just received and prints
+  every reason inside it to look closer: who really owns each address, whether a brand's name is
+  carried along as decoration, what is hidden in characters that never print, and what the wording
+  is doing to you. It never opens the link, never queries a database, and never asks a server
+  whether something is safe.</p>
+
+  <p>
+    <a class="cta" href="https://github.com/wonghanz/ScamGuard">Source on GitHub</a>
+    <a class="cta alt" href="https://github.com/wonghanz/ScamGuard/blob/main/README.md">Every weight it applies</a>
+  </p>
+
+  <h2>The trick, in one address</h2>
+  <table>
+    <tr><th>What you read</th><th>Who it belongs to</th><th class="n">Owner-part</th></tr>
+    <tr><td>shopee-pay-help.top</td><td>a stranger who registered <code>.top</code> in bulk</td><td class="n">shopee-pay-help.top</td></tr>
+    <tr><td>shopee.com.my</td><td>Shopee</td><td class="n">shopee.com.my</td></tr>
+    <tr><td>gcash.com.rewards-claim.top</td><td>whoever owns <code>rewards-claim.top</code></td><td class="n">rewards-claim.top</td></tr>
+  </table>
+  <p>Addresses are read right to left, but nobody reads them that way — the eye stops at the first
+  familiar name it recognises. That gap is the entire mechanism of a scam link, and it is visible in
+  the text alone. Everything ScamGuard does starts from making that one line unmissable.</p>
+
+  <h2>What it looks at</h2>
+  <ul>
+    <li><strong>Ownership.</strong> The registered name and its public suffix, pulled out of any
+      address, with punycode decoded so an internationalised name reads as the word it imitates.</li>
+    <li><strong>Look-alikes.</strong> A brand inside a host that is not one of its 83 published
+      domains; a whole brand address used as a sub-label; one or two keystrokes off a known name,
+      including letter pairs that collapse into one character.</li>
+    <li><strong>Disguise.</strong> Zero-width and bidi characters, two scripts in one hostname, text
+      before an <code>@</code>, and a second address folded into the query string.</li>
+    <li><strong>Hygiene.</strong> Bulk-sold suffixes, generated-looking labels, ports a login page
+      would not use, plain http, numeric addresses, and four or more labels deep.</li>
+    <li><strong>Framing.</strong> Twelve families of wording in English and Chinese — the deadline,
+      the prize, the suspension threat, the "customs fee", the "share me the OTP", the task job that
+      pays you to tap things.</li>
+  </ul>
+
+  <h2>The whole scoring table</h2>
+  <p style="color:#9FB6BB;font-size:15px">Points, not probabilities: they add, they do not multiply,
+  and no single line can carry a reading on its own. This table is on screen under every reading.</p>
+  <table>
+    <tr><th>What earned it</th><th class="n">Wt</th></tr>
+    <tr><td>A brand's name inside a host that is not the brand's</td><td class="n">8.0</td></tr>
+    <tr><td>A brand's whole address used as one label of another domain</td><td class="n">7.0</td></tr>
+    <tr><td>Text before an <code>@</code>: the visible address is not the one reached</td><td class="n">7.0</td></tr>
+    <tr><td>Two writing systems inside one host</td><td class="n">6.0</td></tr>
+    <tr><td>Characters that never print, beside or inside a link</td><td class="n">6.0</td></tr>
+    <tr><td>One or two keystrokes off an address this app knows</td><td class="n">6.0</td></tr>
+    <tr><td>A dotted number where a name should be</td><td class="n">6.0</td></tr>
+    <tr><td>A second address folded into the query</td><td class="n">5.0</td></tr>
+    <tr><td>A brand named in the wording, no link of its own</td><td class="n">4.0</td></tr>
+    <tr><td>A registered name that reads as generated</td><td class="n">4.0</td></tr>
+    <tr><td>Chat deep link or dialled number instead of a page</td><td class="n">3.0</td></tr>
+    <tr><td>The first framing family that matched</td><td class="n">3.0</td></tr>
+    <tr><td>Encoded internationalised name · odd port</td><td class="n">3.0</td></tr>
+    <tr><td>Each further framing family · several owners in one message</td><td class="n">2.0</td></tr>
+    <tr><td>A forwarding service it will not follow · deep subdomains</td><td class="n">2.0</td></tr>
+    <tr><td>Look-alike host <em>and</em> a verify-or-pay request</td><td class="n">2.0</td></tr>
+    <tr><td>A bulk-sold suffix</td><td class="n">1.5</td></tr>
+    <tr><td>Plain http</td><td class="n">1.0</td></tr>
+    <tr><td>A suffix outside the shipped list — coverage note, never a suspicion</td><td class="n">0</td></tr>
+  </table>
+  <p>Under 5.0 prints <em>inconclusive</em>. Twelve and above prints <em>several independent shapes
+  pointing the same way</em>. The total stops being printed at 40. Framing families score once each,
+  however many of their words appear: "urgently", "immediately" and "right now" in one sentence is
+  one fact, not three.</p>
+
+  <div class="note">
+    <p><strong>What a clean reading is worth.</strong> Zero findings is the weakest answer this app
+    gives, and it prints that sentence under its own result. A domain registered this morning,
+    correctly spelled, with a politely worded request, trips nothing here — and those are the scams
+    that work.</p>
+    <p><strong>What was measured.</strong> Run over 30 addresses belonging to real services written
+    as ordinary messages, 3 produced a finding: two chat-app jumps at 3.0, which is what they are,
+    and one domain one keystroke from a marketplace's address at 6.0. A near-miss can be an honest
+    business with an unfortunate name, which is why the finding prints the edit distance rather than
+    a verdict.</p>
+  </div>
+
+  <h2>Where it declines to answer</h2>
+  <ul>
+    <li>No percentage, no confidence score, no real-or-fake verdict. A number out of 100 implies a
+      model with a known error rate; this is arithmetic over a table, shown as that.</li>
+    <li>No blocklist answer, and no threat feed — nothing you paste is looked up anywhere.</li>
+    <li>No clearance. See above.</li>
+    <li>No advice about your money or your account, and no name of anyone to call.</li>
+    <li>No inbox. There is no SMS permission, and there never will be: reading a person's messages to
+      warn them makes the checker the thing it guards against.</li>
+    <li>No history. Nothing you check is written to disk, and the form is wiped when the app leaves the
+      foreground.</li>
+    <li>No image, audio, PDF or QR reading. Only the text you share or type.</li>
+  </ul>
+
+  <h2>Privacy, stated</h2>
+  <ul>
+    <li>Runtime permissions requested: <strong>none</strong>. Text arrives by typing, by an explicit
+      paste, or by one share of one message.</li>
+    <li><code>INTERNET</code> is declared only for the optional pass you configure. With no key entered
+      no request is ever made — and a link is never resolved even with one.</li>
+    <li>Analytics, crash reporting, ads and attribution SDKs: none present.</li>
+    <li><code>allowBackup=false</code>, so neither a typed key nor a checked message can ride out in a
+      cloud backup, a device transfer or an <code>adb backup</code>.</li>
+    <li>Screenshots are not blocked — a reading is the sort of thing you would want to show somebody.</li>
+  </ul>
+
+  <h2>Bring your own key, for two sentences</h2>
+  <p>No default provider, no free tier routed through anyone, no key in the repository. Settings takes a
+  base URL, a model name and a key, kept in this app's private DataStore. The optional pass sends the
+  <em>findings</em> — each label, its weight and the fragment that matched — and not the message body,
+  because the findings already say what the wording said. The prompt forbids clearing a message,
+  declaring one a scam, producing a number, or naming anyone to call, and the answer is labelled on
+  screen as generated text rather than part of the reading. Point it at an <code>ollama</code> or
+  <code>llama.cpp</code> endpoint on your own network and even the findings stay local.</p>
+
+  <h2>Frequently asked</h2>
+  <p class="q">How do I check a link before clicking it on Android?</p>
+  <p>Share the message in, or paste it. The app prints the owner-part of every address — read right to
+  left, not left to right — and lists what looks borrowed, generated, hidden or unsupported by the name
+  it shows. Nothing is opened, so checking never tells anyone your number is live.</p>
+  <p class="q">Can ScamGuard read my SMS and warn me automatically?</p>
+  <p>No, and there is no setting for it. No SMS permission is declared, by design. The message comes to
+  the app one at a time, from you.</p>
+  <p class="q">Why does it say inconclusive instead of safe or dangerous?</p>
+  <p>Both are claims an offline string checker cannot support. Under five points it says inconclusive;
+  with no findings it says that is not a clearance. A fresh, correctly spelled, politely worded domain
+  trips nothing here by design.</p>
+  <p class="q">Does it use a scam-domain database?</p>
+  <p>No — a weight table and a curated list of 83 published brand domains, in one readable file. A feed
+  is stale in exactly the direction that matters, because the address in your message is newer than it.</p>
+  <p class="q">What is the owner-part of a domain?</p>
+  <p>The registered name plus its public suffix: the last labels, not the first. Everything to the left
+  of it is a free choice of whoever registered the address, which is how a link can begin with a familiar
+  brand and belong to a stranger.</p>
+  <p class="q">How does it catch a look-alike domain?</p>
+  <p>A brand name inside a host it does not own; a brand's whole address used as a sub-label; one or two
+  keystrokes of edit distance from a known name, including after collapsing pairs such as rn for m; and
+  two scripts inside one hostname, which is how a Cyrillic о sits inside a Latin word.</p>
+  <p class="q">Can it unmask a bit.ly link?</p>
+  <p>No, deliberately. Following a short link is a request to a server the sender chose, and that request
+  itself tells them the number is live. The app reports that the destination is not in the text and stops.</p>
+  <p class="q">Why did a link I trust come back with points on it?</p>
+  <p>The findings are shapes, not identities. A chat-app jump scores the same for a courier as for a
+  friend, and a near-miss domain may be an honest business with an unfortunate name. The table is on
+  screen under every reading, so you can see exactly which line fired.</p>
+  <p class="q">Which languages are checked?</p>
+  <p>English and Chinese. Malay, Thai, Vietnamese, Indonesian and Tagalog are not checked at all, and the
+  app says so rather than returning a quiet zero that looks like an all-clear.</p>
+  <p class="q">Do I need an account or an API key?</p>
+  <p>Neither. Every check runs offline with no configuration. A key only unlocks the optional plain-words
+  pass.</p>
+  <p class="q">Does it store or upload what I check?</p>
+  <p>No history, no queue, nothing written to disk — a forwarded scam text carries somebody's number. The
+  form is cleared when the app leaves the foreground and <code>allowBackup=false</code> keeps it out of
+  backups.</p>
+  <p class="q">Will it stop me being scammed?</p>
+  <p>No. It blocks nothing and cannot see inside a picture, a voice note or a QR code. It makes the shapes
+  in a message easier to read. That is a much smaller claim than the ones usually made here.</p>
+
+  <h2>Build it</h2>
+  <p>Requires JDK 17 and Android SDK platform 35. AGP 8.7.3, Kotlin 2.0.21, Compose BOM 2024.12.01. The
+  debug APK is signed with the standard Android debug key.</p>
+  <pre><code>git clone https://github.com/wonghanz/ScamGuard.git
+cd ScamGuard
+export ANDROID_HOME=/path/to/Android/Sdk
+./gradlew --no-daemon :app:assembleDebug</code></pre>
+
+  <footer>
+    MIT licensed · Kotlin and Jetpack Compose · Android 8.0+ ·
+    part of the <a href="https://github.com/wonghanz">CapriGuard</a> tools set ·
+    companion to <a href="https://github.com/wonghanz/LeakGuard">LeakGuard</a> ·
+    <a href="https://github.com/wonghanz/ScamGuard/issues">issues</a>
+  </footer>
+</div>
+</body>
+</html>

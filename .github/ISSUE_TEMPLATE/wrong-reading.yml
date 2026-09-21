@@ -1,0 +1,58 @@
+name: Wrong reading
+description: A finding that fired, or did not fire, that does not look right
+labels: ["reading"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ScamGuard reports which shapes in a message matched a published weight
+        table, which were checked and did not match, and what it cannot see at all.
+        It does not report whether a message is a scam, and it will not. A "wrong
+        reading" here means one of three things, all fixable: a finding fired on
+        something innocent, a finding that should have fired did not, or a table
+        line — a brand's domains, a suffix, a phrase family — is stale.
+
+        False positives are the most damaging of the three. Somebody told their
+        friend's message looks fraudulent stops believing the app, and then stops
+        using it where it would have helped.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Which kind of wrong
+      options:
+        - A finding fired on an honest message (false positive)
+        - A finding should have fired and did not (miss)
+        - A table line is wrong or stale
+        - The wording pass matched something it should not have
+        - The owner-part of the address was derived wrongly
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: The text, and what the app said
+      description: Paste the message if you can — redact any phone number or address you would not want traced to a person. Say whether it arrived with a scheme, as `www.`, or as a bare host, because that changes which rules can see it.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: The reading, copied with "Copy this reading"
+      description: That text carries each finding's weight and the table line that set it, plus the list of what was checked and did not match, which is what makes a disagreement traceable to one rule.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead, and why
+      description: If you believe a weight, a brand domain or a phrase family is wrong, name the source. Everything the app can act on lives in app/src/main/java/dev/capriguard/scamguard/link/Tables.kt.
+    validations:
+      required: false
+  - type: dropdown
+    id: android
+    attributes:
+      label: Android version
+      options: ['11', '12', '13', '14', '15', '16']
+    validations:
+      required: true

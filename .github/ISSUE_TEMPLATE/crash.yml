@@ -1,0 +1,35 @@
+name: Crash or build failure
+description: The app stopped, or the build did not finish
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        There is no crash reporter in this build, so logcat is the only channel.
+        The analyzer is pure string work and has no Android dependency, so a crash
+        is almost always in the UI layer or in how a share was delivered. Say
+        roughly what the text looked like — how many links, which scripts, whether
+        it came in through the share sheet or by typing. Please redact any phone
+        number or address you would not want traced to a person.
+  - type: textarea
+    id: repro
+    attributes:
+      label: What you did
+      placeholder: |
+        1. Shared a text/plain message from the SMS app
+        2. The input card filled in
+        3. App closed as the reading was drawn
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Relevant logcat lines
+      description: FATAL EXCEPTION block, or the gradle failure if the build broke.
+      render: text
+  - type: textarea
+    id: env
+    attributes:
+      label: Device, Android version, commit
+    validations:
+      required: true
